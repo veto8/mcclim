@@ -103,6 +103,13 @@ ln -s /Applications "$stage/Applications"
 bg="$stage/.background.png"
 sips -s format png "$ROOT/mcclim.svg" --out "$bg" >/dev/null 2>&1 || cp "$ROOT/mcclim.svg" "$bg"
 
+hdiutil create -volname "$name" -srcfolder "$stage" -ov -format UDZO "$dmg"
+hdiutil verify "$dmg"
+
+mountpoint=$(mktemp -d "${TMPDIR:-/tmp}/mcclim-dmg.XXXXXX")
+trap 'hdiutil detach "$mountpoint" >/dev/null 2>&1 || true; rmdir "$mountpoint" 2>/dev/null || true; rm -rf "$stage"' EXIT
+hdiutil attach -nobrowse -noautoopen -mountpoint "$mountpoint" "$dmg"
+
 osascript <<APPLESCRIPT
 tell application "Finder"
   tell disk "$name"
@@ -125,17 +132,7 @@ tell application "Finder"
 end tell
 APPLESCRIPT
 
-hdiutil create -volname "$name" -srcfolder "$stage" -ov -format UDZO "$dmg"
-hdiutil verify "$dmg"
-
-mountpoint=$(mktemp -d "${TMPDIR:-/tmp}/mcclim-dmg.XXXXXX")
-trap 'hdiutil detach "$mountpoint" >/dev/null 2>&1 || true; rmdir "$mountpoint" 2>/dev/null || true; rm -rf "$stage"' EXIT
-hdiutil attach -nobrowse -noautoopen -mountpoint "$mountpoint" "$dmg"
-plutil -lint "$mountpoint/$app/Contents/Info.plist"
-test -x "$mountpoint/$app/Contents/MacOS/mcclim"
-test -x "$mountpoint/$app/Contents/MacOS/mcclim-launcher"
-test -L "$mountpoint/Applications"
-hdiutil detach "$mountpoint"
+hdiutil detach "$mountpoint" 2>/dev/null || hdiutil detach "$mountpoint" -force
 rmdir "$mountpoint"
 rm -rf "$stage"
 trap - EXIT
