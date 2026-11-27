@@ -111,12 +111,11 @@ trap 'hdiutil detach "$mountpoint" >/dev/null 2>&1 || true; rmdir "$mountpoint" 
 hdiutil attach -nobrowse -noautoopen -mountpoint "$mountpoint" "$dmg"
 sleep 1
 
-osascript <<APPLESCRIPT
+if osascript <<APPLESCRIPT
 tell application "Finder"
-  set targetDisk to POSIX file "$mountpoint" as alias
-  open targetDisk
-  delay 1
-  tell targetDisk
+  tell disk "$name"
+    open
+    delay 1
     set current view of container window to icon view
     set toolbar visible of container window to false
     set statusbar visible of container window to false
@@ -135,6 +134,11 @@ tell application "Finder"
   end tell
 end tell
 APPLESCRIPT
+then
+  :
+else
+  printf "warn  could not set DMG layout; the DMG is still valid\n"
+fi
 
 hdiutil detach "$mountpoint" 2>/dev/null || hdiutil detach "$mountpoint" -force
 rmdir "$mountpoint"
