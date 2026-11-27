@@ -38,6 +38,7 @@ The window shows “Hello, world!” with a **Quit** button.
 - `.gitignore` — Common Lisp, build-output, and `vendor/` ignore rules
 - `.github/scripts/make-windows-launcher.ps1` — compiles a GUI-subsystem .NET launcher, appends a ZIP payload containing the raw SBCL image and `SDL2.dll`, and writes the single-file `mcclim_windows.exe`
 - `dmg_maker.md` — how the graphical DMG installer is built (background, icon layout, Applications symlink)
+- `dmg_background.svg` — 800x500 background image for the DMG installer (drag-to-Applications graphic)
 - `mcclim.svg` — README logo; also used by the project page
 - `pages/public/` — GitHub Pages site (`index.html`, `style.css`, `img/mcclim.svg`), deployed by `pages.yml`
 

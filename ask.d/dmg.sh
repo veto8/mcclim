@@ -101,7 +101,7 @@ ditto "$app" "$stage/$app"
 ln -s /Applications "$stage/Applications"
 
 bg="$stage/.background.png"
-sips -s format png "$ROOT/mcclim.svg" --out "$bg" >/dev/null 2>&1 || cp "$ROOT/mcclim.svg" "$bg"
+sips -s format png "$ROOT/dmg_background.svg" --out "$bg" >/dev/null 2>&1 || cp "$ROOT/dmg_background.svg" "$bg"
 
 hdiutil create -volname "$name" -srcfolder "$stage" -ov -format UDZO "$dmg"
 hdiutil verify "$dmg"
@@ -124,8 +124,8 @@ tell application "Finder"
     set arrangement of theViewOptions to not arranged
     set icon size of theViewOptions to 80
     set background picture of theViewOptions to file ".background.png"
-    set position of item "$app" of container window to {200, 250}
-    set position of item "Applications" of container window to {500, 250}
+    set position of item "$app" of container window to {250, 200}
+    set position of item "Applications" of container window to {550, 200}
     set visible of item ".background.png" of container window to false
     close
     open
