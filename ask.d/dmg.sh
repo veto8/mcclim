@@ -118,25 +118,23 @@ sleep 2
 
 layout_err=$(osascript <<APPLESCRIPT 2>&1 || true
 tell application "Finder"
-  tell disk "$name"
-    open
-    delay 1
-    set current view of container window to icon view
-    set toolbar visible of container window to false
-    set statusbar visible of container window to false
-    set the bounds of container window to {200, 200, 800, 500}
-    set theViewOptions to the icon view options of container window
-    set arrangement of theViewOptions to not arranged
-    set icon size of theViewOptions to 80
-    set background picture of theViewOptions to file ".background.png"
-    set position of item "$app" of container window to {250, 200}
-    set position of item "Applications" of container window to {550, 200}
-    set visible of item ".background.png" of container window to false
-    close
-    open
-    update without registering applications
-    delay 2
-  end tell
+  set targetDisk to (POSIX file "$mountpoint") as alias
+  open targetDisk
+  delay 1
+  set theWindow to front window
+  set current view of theWindow to icon view
+  set toolbar visible of theWindow to false
+  set statusbar visible of theWindow to false
+  set the bounds of theWindow to {200, 200, 800, 500}
+  set theViewOptions to the icon view options of theWindow
+  set arrangement of theViewOptions to not arranged
+  set icon size of theViewOptions to 80
+  set background picture of theViewOptions to file ".background.png"
+  set position of item "$app" of theWindow to {250, 200}
+  set position of item "Applications" of theWindow to {550, 200}
+  set visible of item ".background.png" of theWindow to false
+  update without registering applications
+  delay 2
 end tell
 APPLESCRIPT
 )
