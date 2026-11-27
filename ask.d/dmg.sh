@@ -116,7 +116,7 @@ trap 'hdiutil detach "$mountpoint" >/dev/null 2>&1 || true; rmdir "$mountpoint" 
 hdiutil attach -nobrowse -noautoopen -mountpoint "$mountpoint" "$dmg"
 sleep 1
 
-if osascript <<APPLESCRIPT
+layout_err=$(osascript <<APPLESCRIPT 2>&1 || true
 tell application "Finder"
   tell disk "$name"
     open
@@ -139,10 +139,9 @@ tell application "Finder"
   end tell
 end tell
 APPLESCRIPT
-then
-  :
-else
-  printf "warn  could not set DMG layout; the DMG is still valid\n"
+)
+if [ -n "$layout_err" ]; then
+  printf "warn  could not set DMG layout; the DMG is still valid\n%s\n" "$layout_err"
 fi
 
 hdiutil detach "$mountpoint" 2>/dev/null || hdiutil detach "$mountpoint" -force
