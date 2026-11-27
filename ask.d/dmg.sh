@@ -99,7 +99,33 @@ stage=$(mktemp -d "${TMPDIR:-/tmp}/mcclim-dmg-stage.XXXXXX")
 trap 'rm -rf "$stage"' EXIT
 ditto "$app" "$stage/$app"
 ln -s /Applications "$stage/Applications"
-hdiutil create -volname "mcclim_macos" -srcfolder "$stage" -ov -format UDZO "$dmg"
+
+bg="$stage/.background.png"
+sips -s format png "$ROOT/mcclim.svg" --out "$bg" >/dev/null 2>&1 || cp "$ROOT/mcclim.svg" "$bg"
+
+osascript <<APPLESCRIPT
+tell application "Finder"
+  tell disk "$name"
+    open
+    set current view of container window to icon view
+    set toolbar visible of container window to false
+    set statusbar visible of container window to false
+    set the bounds of container window to {200, 200, 800, 500}
+    set theViewOptions to the icon view options of container window
+    set arrangement of theViewOptions to not arranged
+    set icon size of theViewOptions to 80
+    set background picture of theViewOptions to file ".background.png"
+    set position of item "$app" of container window to {200, 250}
+    set position of item "Applications" of container window to {500, 250}
+    close
+    open
+    update without registering applications
+    delay 2
+  end tell
+end tell
+APPLESCRIPT
+
+hdiutil create -volname "$name" -srcfolder "$stage" -ov -format UDZO "$dmg"
 hdiutil verify "$dmg"
 
 mountpoint=$(mktemp -d "${TMPDIR:-/tmp}/mcclim-dmg.XXXXXX")

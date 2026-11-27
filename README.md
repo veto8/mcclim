@@ -93,6 +93,10 @@ Use `/Applications/mcclim_macos.app` for Apple silicon. If macOS still prompts, 
 | MAINTENANCE | 11 | Clean - remove `dist/`, `bin/`, and macOS `.app` bundles |
 |  | 0 | Exit |
 
+## DMG Maker
+
+`dmg_maker.md` documents how `ask.d/dmg.sh` builds the graphical DMG installer (background image, app icon, Applications symlink).
+
 ## Build output
 
 Tasks 2, 6, and 9 create `dist/mcclim/` with a ~22 MB SBCL executable (plus `SDL2.dll` on Windows, and `libzstd.1.dylib`, `libSDL2-2.0.0.dylib`, and `libSDL3.dylib` on macOS). McCLIM, the Lisp runtime, and `DejaVuSans.ttf` are saved into the image, so there is no `lib/` tree and no SBCL, Quicklisp, or system font install needed on the target machine. On each GUI run the embedded font is extracted to `~/.cache/mcclim/DejaVuSans.ttf`; all text styles use that one regular face. Every build task clears `dist/` first. CI instead sets `MCCLIM_DMG_SOURCE` to its prebuilt binary so task 4 does not rebuild it. Task 11 removes `dist/`, `bin/`, and the macOS `.app` bundles.
