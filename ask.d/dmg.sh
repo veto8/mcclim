@@ -132,7 +132,8 @@ tell application "Finder"
   set background picture of theViewOptions to (POSIX file "$mountpoint/.background.png") as alias
   set position of item "$app" of theWindow to {250, 200}
   set position of item "Applications" of theWindow to {550, 200}
-  update without registering applications
+  close
+  open
   delay 2
 end tell
 APPLESCRIPT
