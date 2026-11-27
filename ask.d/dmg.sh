@@ -115,6 +115,7 @@ osascript <<APPLESCRIPT
 tell application "Finder"
   set targetDisk to POSIX file "$mountpoint" as alias
   open targetDisk
+  delay 1
   tell targetDisk
     set current view of container window to icon view
     set toolbar visible of container window to false
