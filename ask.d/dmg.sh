@@ -113,8 +113,8 @@ hdiutil verify "$dmg"
 
 mountpoint=$(mktemp -d "${TMPDIR:-/tmp}/mcclim-dmg.XXXXXX")
 trap 'hdiutil detach "$mountpoint" >/dev/null 2>&1 || true; rmdir "$mountpoint" 2>/dev/null || true; rm -rf "$stage"' EXIT
-hdiutil attach -nobrowse -noautoopen -mountpoint "$mountpoint" "$dmg"
-sleep 1
+hdiutil attach -noautoopen -mountpoint "$mountpoint" "$dmg"
+sleep 2
 
 layout_err=$(osascript <<APPLESCRIPT 2>&1 || true
 tell application "Finder"
