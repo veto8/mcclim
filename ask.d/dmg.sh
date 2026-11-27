@@ -113,7 +113,7 @@ sleep 1
 
 osascript <<APPLESCRIPT
 tell application "Finder"
-  set targetDisk to disk "$name"
+  set targetDisk to POSIX file "$mountpoint" as alias
   open targetDisk
   tell targetDisk
     set current view of container window to icon view
