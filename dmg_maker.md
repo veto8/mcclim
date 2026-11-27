@@ -9,7 +9,7 @@ How the macOS DMG gets its graphical install layout (background image + app icon
 1. Open the staged folder as a disk image.
 2. Switch to icon view, hide toolbar and statusbar.
 3. Set a fixed window size.
-4. Use `mcclim.svg` (converted to PNG via `sips`) as the background.
+4. Use `dmg_background.svg` (rendered to PNG via `qlmanage`) as the background.
 5. Position the `.app` on the left and `Applications` on the right.
 6. Save the layout into `.DS_Store`.
 
@@ -19,7 +19,7 @@ After that, `hdiutil create` makes the compressed `UDZO` DMG from the staged fol
 
 - macOS (the script exits on non-Darwin).
 - `osascript`, `hdiutil`, `sips`, `ditto`, `plutil` (all system tools).
-- An SVG or PNG at the project root (`mcclim.svg`).
+- An SVG or PNG at the project root (`dmg_background.svg`).
 
 ## How to run
 

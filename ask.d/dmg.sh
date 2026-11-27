@@ -101,7 +101,12 @@ ditto "$app" "$stage/$app"
 ln -s /Applications "$stage/Applications"
 
 bg="$stage/.background.png"
-sips -s format png "$ROOT/dmg_background.svg" --out "$bg" >/dev/null 2>&1 || cp "$ROOT/dmg_background.svg" "$bg"
+qlmanage -t -s 800 -o "$stage" "$ROOT/dmg_background.svg" >/dev/null 2>&1
+if [ -f "$stage/dmg_background.svg.png" ]; then
+  mv "$stage/dmg_background.svg.png" "$bg"
+else
+  sips -s format png "$ROOT/dmg_background.svg" --out "$bg" >/dev/null 2>&1 || cp "$ROOT/dmg_background.svg" "$bg"
+fi
 
 hdiutil create -volname "$name" -srcfolder "$stage" -ov -format UDZO "$dmg"
 hdiutil verify "$dmg"
