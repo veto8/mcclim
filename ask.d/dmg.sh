@@ -109,11 +109,13 @@ hdiutil verify "$dmg"
 mountpoint=$(mktemp -d "${TMPDIR:-/tmp}/mcclim-dmg.XXXXXX")
 trap 'hdiutil detach "$mountpoint" >/dev/null 2>&1 || true; rmdir "$mountpoint" 2>/dev/null || true; rm -rf "$stage"' EXIT
 hdiutil attach -nobrowse -noautoopen -mountpoint "$mountpoint" "$dmg"
+sleep 1
 
 osascript <<APPLESCRIPT
 tell application "Finder"
-  tell disk "$name"
-    open
+  set targetDisk to disk "$name"
+  open targetDisk
+  tell targetDisk
     set current view of container window to icon view
     set toolbar visible of container window to false
     set statusbar visible of container window to false
